@@ -1,4 +1,9 @@
-export function toFormData(files : File | File[] | FileList, fieldName : string = "files[]") : FormData {
+/**
+ * @param  {File | File[] | FileList}  files 
+ * @param  {string}  fieldName 
+ * @return {FormData}
+ */
+export function toFormData(files, fieldName = "files[]") {
     var formData = new FormData();
 
     if (files instanceof File) {
@@ -13,6 +18,10 @@ export function toFormData(files : File | File[] | FileList, fieldName : string 
     return formData;
 }
 
-export function relativePath(file : any) : string {
+/**
+ * @param  {any}  file
+ * @return {string} 
+ */
+export function relativePath(file) {
     return file.xRelativePath || file.webkitRelativePath || file.name;
 }

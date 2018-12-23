@@ -4,9 +4,10 @@ import { isSupported } from "./dragjs";
 
 class DropZoneEvent
 {
-    args: DropZoneArguments;
-
-    constructor(args: DropZoneArguments)
+    /**
+     * @param {DropZoneArguments} args 
+     */
+    constructor(args)
     {
         this.args = args;
     }
@@ -35,7 +36,7 @@ class DropZoneEvent
      *
      * @param {Event} e
      */
-    _stopEventsPropagation(e: Event)
+    _stopEventsPropagation(e)
     {
         e.preventDefault();
         e.stopPropagation();
@@ -43,8 +44,10 @@ class DropZoneEvent
 
     /**
      * @private
+     *
+     * @param {Event} e
      */
-    _dragOver(e: Event)
+    _dragOver(e)
     {
         let dataTransfer = DragJsDataTransfer.event2NativeDataTransfer(e);
 
@@ -65,8 +68,10 @@ class DropZoneEvent
 
     /**
      * @private
+     * 
+     * @param {Event} e
      */
-    _drop(e : Event)
+    _drop(e)
     {
         var dataTransfer = new DragJsDataTransfer(DragJsDataTransfer.event2NativeDataTransfer(e))
 
@@ -76,6 +81,14 @@ class DropZoneEvent
                     detail: {files}
                 }))
             }
+        }, (reason) => {
+            var notPrevented = this.args.element.dispatchEvent(new CustomEvent(EVENT_ERR, {
+                cancelable: true, 
+                detail: {reason}
+            }));
+            if (notPrevented) {
+                console.error(reason);
+            }
         })
     }
 }
@@ -84,3 +97,4 @@ export default DropZoneEvent;
 export const EVENT_DRAGOVER = 'dropzone-dragover';
 export const EVENT_DRAGEND = 'dropzone-dragend';
 export const EVENT_DROP = 'dropzone-drop';
+export const EVENT_ERR = 'dropzone-error';

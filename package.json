@@ -1,6 +1,6 @@
 {
   "name": "new-drag.js",
-  "version": "0.5.0",
+  "version": "0.5.1-beta",
   "description": "A file drag-and-drop plugin for browser.",
   "main": "index.js",
   "scripts": {
@@ -24,8 +24,6 @@
     "@babel/preset-env": "^7.2.3",
     "@types/node": "^10.12.18",
     "babel-loader": "^8.0.4",
-    "ts-loader": "^5.3.1",
-    "typescript": "^3.2.2",
     "webpack": "^4.28.1",
     "webpack-cli": "^3.1.2"
   },

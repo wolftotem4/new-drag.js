@@ -7,7 +7,7 @@ A file drag-and-drop plugin for browser.
 ## Features
 
 * A pure library.
-* Lightweight (Minimized drag.js ~5.3 KiB)
+* Lightweight (Minimized drag.js ~6.92 KiB)
 * Folders upload
 
 ## Basic Usage

@@ -3,9 +3,10 @@ import { EVENT_DRAGOVER, EVENT_DRAGEND } from "./dropzone_event";
 
 class DropZoneDom
 {
-    args : DropZoneArguments
-
-    constructor(args : DropZoneArguments)
+    /**
+     * @param {DropZoneArguments} args 
+     */
+    constructor(args)
     {
         this.args = args
     }
@@ -24,7 +25,7 @@ class DropZoneDom
     /**
      * @returns {string}
      */
-    getDragOverClass() : string
+    getDragOverClass()
     {
         return this.args.options.cssClass && this.args.options.cssClass.dragover || 'dragover';
     }
@@ -33,7 +34,7 @@ class DropZoneDom
      * @param  {string}  className
      * @return {this}
      */
-    addClassName(className: string) : this
+    addClassName(className)
     {
         var classNames = this.getClassNames();
         if (classNames.indexOf(className) == -1) {
@@ -47,9 +48,13 @@ class DropZoneDom
      * @param  {string}  className
      * @return {this}
      */
-    removeClassName(className: string) : this
+    removeClassName(className)
     {
-        var classNames = this.getClassNames(), index : number;
+        var classNames = this.getClassNames();
+        /**
+         * @type {number}
+         */
+        var index;
         if ((index = classNames.indexOf(className)) > -1) {
             classNames.splice(index, 1);
             this.setClassNames(classNames);
@@ -58,14 +63,19 @@ class DropZoneDom
     }
 
     /**
-     * @return string[]
+     * @return {string[]}
      */
-    getClassNames() : string[]
+    getClassNames()
     {
         return this.args.element.className && this.args.element.className.split(' ') || [];
     }
 
-    setClassNames(classNames : string[]) : this
+    /**
+     * 
+     * @param  {string[]}  classNames
+     * @return {this}
+     */
+    setClassNames(classNames)
     {
         this.args.element.className = classNames.join(' ');
         return this

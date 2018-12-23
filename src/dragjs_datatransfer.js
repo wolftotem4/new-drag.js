@@ -1,11 +1,11 @@
 import { travelTransferItemList } from "./entry_traveler";
 
-
 class DragJsDataTransfer
 {
-    originalDataTransfer : DataTransfer | null;
-
-    constructor(originalDataTransfer: DataTransfer | null = null)
+    /**
+     * @param {DataTransfer | null} originalDataTransfer
+     */
+    constructor(originalDataTransfer)
     {
         this.originalDataTransfer = originalDataTransfer;
     }
@@ -13,7 +13,7 @@ class DragJsDataTransfer
     /**
      * @return {Promise<File[] | FileList>}
      */
-    getFiles() : Promise<File[] | FileList>
+    getFiles()
     {
         if (! this.originalDataTransfer) {
             return Promise.resolve([]);
@@ -34,7 +34,7 @@ class DragJsDataTransfer
      * @param  {Event}  event
      * @return {DataTransfer|null}
      */
-    static event2NativeDataTransfer(event: Event) : DataTransfer | null
+    static event2NativeDataTransfer(event)
     {
         if (! (event instanceof DragEvent)) {
             return null;
@@ -47,7 +47,7 @@ class DragJsDataTransfer
      * @param  {DataTransfer}  dataTransfer
      * @return {boolean}
      */
-    static getContainFiles(dataTransfer : DataTransfer) : boolean
+    static getContainFiles(dataTransfer)
     {
         let dataTransferTypes = dataTransfer.types;
 

@@ -1,22 +1,14 @@
-import { DropZoneOptions, DropZoneDropCallback } from "..";
-import DropZoneEvent, { EVENT_DROP } from "./dropzone_event";
+import { DropZoneOptions, DropZoneDropCallback, DropZoneFallback } from "..";
+import DropZoneEvent, { EVENT_DROP, EVENT_ERR } from "./dropzone_event";
 import DropZoneDom from "./dropzone_dom";
 
 class DropZone
 {
-    element: HTMLElement;
-
-    options: DropZoneOptions;
-
-    events: DropZoneEvent;
-
-    dom: DropZoneDom;
-
     /**
      * @param {HTMLElement} element
      * @param {DropZoneOptions} options
      */
-    constructor(element: HTMLElement, options: DropZoneOptions = {})
+    constructor(element, options = {})
     {
         this.element = element;
         this.options = options;
@@ -39,23 +31,32 @@ class DropZone
     /**
      * 
      * @param  {DropZoneDropCallback}  callback
+     * @param  {DropZoneFallback=}  fallback
      * @return {this}
      */
-    listenOnDrop(callback : DropZoneDropCallback) : this
+    listenOnDrop(callback, fallback)
     {
-        this.element.addEventListener(EVENT_DROP, function (e : CustomEvent) {
+        this.element.addEventListener(EVENT_DROP, function (e) {
             callback(e.detail.files);
         }, false);
+
+        if (fallback) {
+            this.element.addEventListener(EVENT_ERR, function (e) {
+                e.preventDefault();
+                fallback(e.detail.reason);
+            })
+        }
+
         return this
     }
 
     /**
      * @return {Promise<File[] | FileList>}
      */
-    getDropFiles() : Promise<File[] | FileList>
+    getDropFiles()
     {
         return new Promise((resolve, reject) => {
-            this.element.addEventListener(EVENT_DROP, function (e : CustomEvent) {
+            this.element.addEventListener(EVENT_DROP, function (e) {
                 resolve(e.detail.files);
             }, false);
         })

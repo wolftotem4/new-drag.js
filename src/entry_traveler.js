@@ -2,10 +2,10 @@
  * @param  {any}  reader
  * @return {Promise<File[]>}
  */
-function travelDirEntry(reader : any) : Promise<File[]>
+function travelDirEntry(reader)
 {
     return new Promise((resolve, reject) => {
-        reader.readEntries((entries : any[]) => {
+        reader.readEntries((entries) => {
             if (entries.length) {
                 travelDirEntry(reader).then((sub) => {
                     resolve(entries.concat(sub));
@@ -23,9 +23,9 @@ function travelDirEntry(reader : any) : Promise<File[]>
  * @param  {string}  path
  * @return {Promise<File[]>}
  */
-function fileEntry(fileEntry : any, path : string) : Promise<File[]>
+function fileEntry(fileEntry, path)
 {
-    return readFileEntry(fileEntry).then((file : any) => {
+    return readFileEntry(fileEntry).then((file) => {
         file.xRelativePath = path + file.name;
         return [file];
     });
@@ -35,7 +35,7 @@ function fileEntry(fileEntry : any, path : string) : Promise<File[]>
  * @param {any}  dirEntry
  * @param {string}  path
  */
-function dirEntry(dirEntry: any, path : string) : Promise<File[]>
+function dirEntry(dirEntry, path)
 {
     return readDirEntry(dirEntry).then((entries) => {
         return travelEntries(entries, path + dirEntry.name + "/")
@@ -47,7 +47,7 @@ function dirEntry(dirEntry: any, path : string) : Promise<File[]>
  * @param  {string}  path
  * @return {Promise<File[]>}
  */
-function travelEntries(entries : any[], path : string = "") : Promise<File[]>
+function travelEntries(entries, path = "")
 {
     return Promise.all(entries.map((entry) => {
         return (entry.isFile) ? fileEntry(entry, path) : dirEntry(entry, path);
@@ -60,7 +60,7 @@ function travelEntries(entries : any[], path : string = "") : Promise<File[]>
  * @param  {any}  fileEntry
  * @return {Promise<File>}
  */
-function readFileEntry(fileEntry : any) : Promise<File>
+function readFileEntry(fileEntry)
 {
     return new Promise((resolve, reject) => fileEntry.file(resolve, reject));
 }
@@ -69,7 +69,7 @@ function readFileEntry(fileEntry : any) : Promise<File>
  * @param  {any}  dirEntry
  * @return {Promise<File[]>}
  */
-function readDirEntry(dirEntry : any) : Promise<File[]>
+function readDirEntry(dirEntry)
 {
     return travelDirEntry(dirEntry.createReader());
 }
@@ -78,7 +78,7 @@ function readDirEntry(dirEntry : any) : Promise<File[]>
  * @param  {DataTransferItemList}  items
  * @return {any[]}
  */
-function getAsEntry(items: DataTransferItemList) : any[]
+function getAsEntry(items)
 {
     var entries = [];
 
@@ -100,7 +100,7 @@ function getAsEntry(items: DataTransferItemList) : any[]
  * @param  {DataTransferItemList}  items
  * @return {Promise<File[]}
  */
-export function travelTransferItemList(items: DataTransferItemList) : Promise<File[]>
+export function travelTransferItemList(items)
 {
     return travelEntries(getAsEntry(items));
 }

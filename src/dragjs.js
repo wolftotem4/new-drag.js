@@ -1,7 +1,10 @@
 import DropZone from "./dropzone";
 import { toFormData, relativePath } from "./utils";
 
-export function isSupported() : boolean {
+/**
+ * @return {boolean}
+ */
+export function isSupported() {
     return typeof FileList !== 'undefined'
 }
 export { DropZone }
