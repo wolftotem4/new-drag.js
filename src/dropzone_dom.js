@@ -27,7 +27,7 @@ class DropZoneDom
      */
     getDragOverClass()
     {
-        return this.args.options.cssClass && this.args.options.cssClass.dragover || 'dragover';
+        return this.args.options.cssClass && this.args.options.cssClass.dragover || 'is-dragover';
     }
 
     /**

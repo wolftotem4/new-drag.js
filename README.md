@@ -23,7 +23,7 @@ A file drag-and-drop plugin for browser.
   color: #333;
 }
 
-#droparea.dragover {
+#droparea.is-dragover {
   background: #dedede;
 }
 </style>
@@ -71,7 +71,7 @@ dragzone.listenOnDrop(function (files) {
   color: #333;
 }
 
-#droparea.dragover {
+#droparea.is-dragover {
   background: #dedede;
 }
 </style>
