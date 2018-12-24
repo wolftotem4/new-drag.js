@@ -1,6 +1,6 @@
 {
   "name": "new-drag.js",
-  "version": "0.5.1-beta",
+  "version": "0.5.1",
   "description": "A file drag-and-drop plugin for browser.",
   "main": "index.js",
   "scripts": {
