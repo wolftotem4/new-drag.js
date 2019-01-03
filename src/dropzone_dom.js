@@ -1,5 +1,5 @@
 import { DropZoneArguments } from "..";
-import { EVENT_DRAGOVER, EVENT_DRAGEND } from "./dropzone_event";
+import { EVENT_DRAGENTER, EVENT_DRAGLEAVE } from "./dropzone_event";
 
 class DropZoneDom
 {
@@ -13,11 +13,11 @@ class DropZoneDom
 
     registerEventListeners()
     {
-        this.args.element.addEventListener(EVENT_DRAGOVER, () => {
+        this.args.element.addEventListener(EVENT_DRAGENTER, () => {
             this.addClassName(this.getDragOverClass());
         }, false);
 
-        this.args.element.addEventListener(EVENT_DRAGEND, () => {
+        this.args.element.addEventListener(EVENT_DRAGLEAVE, () => {
             this.removeClassName(this.getDragOverClass());
         }, false);
     }

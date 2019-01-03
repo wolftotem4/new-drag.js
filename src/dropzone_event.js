@@ -10,23 +10,15 @@ class DropZoneEvent
     constructor(args)
     {
         this.args = args;
+        this.dragEnterCounter = 0;
     }
 
     registerEventListeners()
     {
-        "drag dragstart dragend dragover dragenter dragleave drop".split(" ").forEach((event) => {
-            this.args.element.addEventListener(event, this._stopEventsPropagation.bind(this), false)
-        });
-
         if (isSupported()) {
-            "dragover dragenter".split(" ").forEach((event) => {
-                this.args.element.addEventListener(event, this._dragOver.bind(this), false);
-            })
-
-            "dragleave dragend drop".split(" ").forEach((event) => {
-                this.args.element.addEventListener(event, this._dragEnd.bind(this), false);
-            })
-
+            this.args.element.addEventListener('dragover', this._dragOver.bind(this), false);
+            this.args.element.addEventListener('dragenter', this._dragEnter.bind(this), false);
+            this.args.element.addEventListener('dragleave', this._dragEnd.bind(this), false);
             this.args.element.addEventListener('drop', this._drop.bind(this), false);
         }
     }
@@ -36,10 +28,12 @@ class DropZoneEvent
      *
      * @param {Event} e
      */
-    _stopEventsPropagation(e)
+    _dragOver(e)
     {
-        e.preventDefault();
-        e.stopPropagation();
+        let dataTransfer = this._toFileDataTransfer(e)
+        if (dataTransfer) {
+            dataTransfer.dropEffect = "copy"
+        }
     }
 
     /**
@@ -47,23 +41,35 @@ class DropZoneEvent
      *
      * @param {Event} e
      */
-    _dragOver(e)
+    _dragEnter(e)
     {
-        let dataTransfer = DragJsDataTransfer.event2NativeDataTransfer(e);
+        let dataTransfer = this._toFileDataTransfer(e)
 
-        let containFiles = dataTransfer ? DragJsDataTransfer.getContainFiles(dataTransfer) : false;
+        if (dataTransfer && this.dragEnterCounter++ == 0) {
+            this.args.element.dispatchEvent(new CustomEvent(EVENT_DRAGENTER));
+        }
+    }
 
-        if (containFiles) {
-            this.args.element.dispatchEvent(new CustomEvent(EVENT_DRAGOVER));
+    /**
+     * @private
+     *
+     * @param {Event} e
+     */
+    _dragEnd(e)
+    {
+        let dataTransfer = this._toFileDataTransfer(e)
+
+        if (dataTransfer && --this.dragEnterCounter == 0) {
+            this._raiseEventDragLeave()
         }
     }
 
     /**
      * @private
      */
-    _dragEnd()
+    _raiseEventDragLeave()
     {
-        this.args.element.dispatchEvent(new CustomEvent(EVENT_DRAGEND));
+        this.args.element.dispatchEvent(new CustomEvent(EVENT_DRAGLEAVE));
     }
 
     /**
@@ -73,28 +79,54 @@ class DropZoneEvent
      */
     _drop(e)
     {
-        var dataTransfer = new DragJsDataTransfer(DragJsDataTransfer.event2NativeDataTransfer(e))
+        let originalDataTransfer = this._toFileDataTransfer(e)
 
-        dataTransfer.getFiles().then((files) => {
-            if (files.length) {
-                this.args.element.dispatchEvent(new CustomEvent(EVENT_DROP, {
-                    detail: {files}
-                }))
-            }
-        }, (reason) => {
-            var notPrevented = this.args.element.dispatchEvent(new CustomEvent(EVENT_ERR, {
-                cancelable: true, 
-                detail: {reason}
-            }));
-            if (notPrevented) {
-                console.error(reason);
-            }
-        })
+        if (originalDataTransfer) {
+            this.dragEnterCounter = 0;
+            this._raiseEventDragLeave();
+
+            let dataTransfer = new DragJsDataTransfer(originalDataTransfer)
+
+            dataTransfer.getFiles().then((files) => {
+                if (files.length) {
+                    this.args.element.dispatchEvent(new CustomEvent(EVENT_DROP, {
+                        detail: {files}
+                    }))
+                }
+            }, (reason) => {
+                var notPrevented = this.args.element.dispatchEvent(new CustomEvent(EVENT_ERR, {
+                    cancelable: true, 
+                    detail: {reason}
+                }));
+                if (notPrevented) {
+                    console.error(reason);
+                }
+            })
+        }
+    }
+
+    /**
+     * @private
+     *
+     * @param  {Event}  e
+     * @return {DataTransfer | null}
+     */
+    _toFileDataTransfer(e)
+    {
+        let dataTransfer = DragJsDataTransfer.event2NativeDataTransfer(e);
+
+        let containFiles = dataTransfer ? DragJsDataTransfer.getContainFiles(dataTransfer) : false;
+
+        if (containFiles) {
+            e.preventDefault();
+
+            return dataTransfer;
+        }
     }
 }
 
 export default DropZoneEvent;
-export const EVENT_DRAGOVER = 'dropzone-dragover';
-export const EVENT_DRAGEND = 'dropzone-dragend';
+export const EVENT_DRAGENTER = 'dropzone-dragenter';
+export const EVENT_DRAGLEAVE = 'dropzone-dragleave';
 export const EVENT_DROP = 'dropzone-drop';
 export const EVENT_ERR = 'dropzone-error';
