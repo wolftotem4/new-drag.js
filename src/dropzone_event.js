@@ -18,7 +18,7 @@ class DropZoneEvent
         if (isSupported()) {
             this.args.element.addEventListener('dragover', this._dragOver.bind(this), false);
             this.args.element.addEventListener('dragenter', this._dragEnter.bind(this), false);
-            this.args.element.addEventListener('dragleave', this._dragEnd.bind(this), false);
+            this.args.element.addEventListener('dragleave', this._dragLeave.bind(this), false);
             this.args.element.addEventListener('drop', this._drop.bind(this), false);
         }
     }
@@ -55,7 +55,7 @@ class DropZoneEvent
      *
      * @param {Event} e
      */
-    _dragEnd(e)
+    _dragLeave(e)
     {
         let dataTransfer = this._toFileDataTransfer(e)
 
