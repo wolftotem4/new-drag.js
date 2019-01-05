@@ -1,1 +1,1 @@
-module.exports = require("./src/dragjs");
+module.exports = require("./lib/dragjs");
