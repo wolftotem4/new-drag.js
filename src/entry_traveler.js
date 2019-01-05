@@ -38,7 +38,7 @@ const EntryTraveler = {
                 if (entry.isFile) {
                     /** @type {FileEntry} */
                     let fileEntry = entry;
-                    return [EntryTraveler.fileEntry.get(fileEntry, path)];
+                    return EntryTraveler.fileEntry.get(fileEntry, path);
                 } else {
                     /** @type {DirectoryEntry} */
                     let dirEntry = entry;
@@ -54,13 +54,13 @@ const EntryTraveler = {
         /**
          * @param  {FileEntry}   entry
          * @param  {string}  path
-         * @return {Promise<File>}
+         * @return {Promise<File[]>}
          */
         get(entry, path)
         {
             return EntryTraveler.fileEntry._file(entry).then((file) => {
                 file['xRelativePath'] = path + file.name;
-                return file;
+                return [file];
             });
         },
 
