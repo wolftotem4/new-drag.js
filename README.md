@@ -174,3 +174,7 @@ input.addEventListener('change', function () {
 * Microsoft Edge
 * Google Chrome
 * Mozilla Firefox
+
+## Alternative
+
+* new-drag.js-closure ([GitHub](https://github.com/wolftotem4/new-drag.js-closure), npm) - Coded in Google Closure
