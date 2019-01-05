@@ -177,4 +177,5 @@ input.addEventListener('change', function () {
 
 ## Alternative
 
-* new-drag.js-closure ([GitHub](https://github.com/wolftotem4/new-drag.js-closure), npm) - Coded in Google Closure
+* new-drag.js-closure ([GitHub](https://github.com/wolftotem4/new-drag.js-closure), [npm](https://www.npmjs.com/package/new-drag.js-closure)) - Coded in Google Closure
+
