@@ -1,4 +1,4 @@
-import { travelTransferItemList } from "./entry_traveler";
+import EntryTraveler from "./entry_traveler";
 
 class DragJsDataTransfer
 {
@@ -24,7 +24,7 @@ class DragJsDataTransfer
         if (dataTransfer.items) {
             let items = dataTransfer.items;
 
-            return travelTransferItemList(items);
+            return EntryTraveler.itemList.travel(items);
         } else {
             return Promise.resolve(dataTransfer.files);
         }
